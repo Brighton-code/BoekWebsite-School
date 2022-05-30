@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <% books.forEach(e => {%>
+        <section>
+            <h3><%- e.title %></h3>
+            <article>
+                Description: <%- e.description %> 
+            </article>
+            <section>
+                <p>Created at: <%- new Date(e.createdAt).toLocaleDateString() %></p>
+                <p>Updated at: <%- new Date(e.updatedAt).toLocaleDateString() %></p>
+            </section>
+        </section>
+    <%}) %> 
+</body>
+</html>
