@@ -15,6 +15,10 @@ const bookSchema = new mongoose.Schema(
 			type: String,
 			maxlength: 500,
 		},
+		user_id: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'User',
+		},
 		chapters: [
 			{
 				type: mongoose.Schema.Types.ObjectId,

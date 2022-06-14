@@ -22,10 +22,16 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		dot: {
+		dob: {
 			type: Date,
 			required: true,
 		},
+		books: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'Book',
+			},
+		],
 	},
 	{ timestamps: true, collection: 'users' }
 );

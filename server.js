@@ -3,6 +3,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const express = require('express');
 const Book = require('./models/book');
+const session = require('express-session');
 
 /* MongoDB/Mongoose connection */
 mongoose
@@ -12,6 +13,7 @@ mongoose
 
 /* App settings */
 const app = express();
+app.use(session({ secret: process.env.SECRET, resave: true, saveUninitialized: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
