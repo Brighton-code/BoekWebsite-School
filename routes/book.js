@@ -55,11 +55,11 @@ router.get('/:slugBook/:slugChapter', async (req, res) => {
 });
 
 router.put(
-	'/:id',
+	'/:slug',
 	loggedin(),
 	async (req, res, next) => {
 		// req.book = await Book.findById(req.params.id);
-		req.book = await Book.findOne({ _id: req.params.id, user_id: req.session.uuid });
+		req.book = await Book.findOne({ slug: req.params.slug, user_id: req.session.uuid });
 		if (req.book) {
 			next();
 		} else {
@@ -69,10 +69,10 @@ router.put(
 	saveBookAndRedirect('update')
 );
 
-router.delete('/:id', loggedin(), async (req, res) => {
-	const book = await Book.findOne({ _id: req.params.id, user_id: req.session.uuid });
+router.delete('/:slug', loggedin(), async (req, res) => {
+	const book = await Book.findOne({ slug: req.params.slug, user_id: req.session.uuid });
 	if (book) {
-		await Book.deleteOne({ _id: req.params.id });
+		await Book.deleteOne({ slug: req.params.slug });
 	} else {
 		res.json({ respone: 'User does not own book' });
 	}

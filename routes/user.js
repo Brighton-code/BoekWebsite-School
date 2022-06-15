@@ -34,7 +34,7 @@ router.post('/register', async (req, res) => {
 		nick_name: userData.name,
 		e_mail: userData.email,
 		password: userData.pass,
-		dob: new Date(),
+		dob: dob,
 	});
 	await newUser
 		.save()
@@ -50,8 +50,8 @@ router.get('/logout', async (req, res) => {
 	res.json({ message: 'logout' });
 });
 
-router.get('/:slug', async (req, res) => {
-	res.json({ message: 'Get user by slug', slug: req.params.slug });
+router.get('/:nick', async (req, res) => {
+	res.json({ message: 'Get user by slug', nick: req.params.nick });
 });
 
 router.get('/', async (req, res) => {
