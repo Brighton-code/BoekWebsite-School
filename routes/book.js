@@ -28,10 +28,14 @@ router.post(
 
 router.post('/:slug', loggedin(), async (req, res) => {
 	const book = await Book.findOne({ slug: req.params.slug, user_id: req.session.uuid });
+	let pub;
+	if (req.body.published) pub = req.body.published;
+	else pub = false;
 	if (book) {
 		const chapter = await new Chapter({
 			title: req.body.title,
 			text: req.body.text,
+			published: pub,
 			book_id: book._id,
 		});
 		book.chapters.push(chapter._id);
