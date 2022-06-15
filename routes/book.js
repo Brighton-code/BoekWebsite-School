@@ -26,7 +26,7 @@ router.post(
 	saveBookAndRedirect('new')
 );
 
-router.post('/:slug/new', loggedin(), async (req, res) => {
+router.post('/:slug', loggedin(), async (req, res) => {
 	const book = await Book.findOne({ slug: req.params.slug, user_id: req.session.uuid });
 	if (book) {
 		const chapter = await new Chapter({
@@ -44,7 +44,7 @@ router.post('/:slug/new', loggedin(), async (req, res) => {
 });
 
 router.get('/:slugBook/:slugChapter', async (req, res) => {
-	await Chapter.findOne({ slug: req.params.slugChapter })
+	await Chapter.findOne({ slug: req.params.slugChapter, published: true })
 		.then((chapter) => {
 			if (chapter) res.json({ chapter });
 			else res.json({ error: 'no chapter found with slug' });

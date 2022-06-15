@@ -28,13 +28,13 @@ router.post('/register', async (req, res) => {
 		name: req.body.username,
 		email: req.body.email,
 		pass: req.body.password,
-		dob: req.body.dob,
+		dob: new Date(req.body.dob),
 	};
 	const newUser = await new User({
 		nick_name: userData.name,
 		e_mail: userData.email,
 		password: userData.pass,
-		dob: dob,
+		dob: userData.dob,
 	});
 	await newUser
 		.save()
