@@ -47,7 +47,15 @@ router.post('/register', async (req, res) => {
 });
 
 router.get('/logout', async (req, res) => {
-	res.json({ message: 'logout' });
+	if (req.session) {
+		req.session.destroy((err) => {
+			if (err) {
+				res.status(400).json({ error: 'Could not logout' });
+			} else {
+				res.json({ respone: 'Logged out' });
+			}
+		});
+	}
 });
 
 router.get('/:nick', async (req, res) => {
