@@ -62,6 +62,34 @@ router.get('/:slugBook/:slugChapter', async (req, res) => {
 		});
 });
 
+router.put('/:slugBook/:slugChapter', loggedin(), async (req, res) => {
+	const chapterID = req.params.slugChapter.split('-', 1);
+	await Book.findOne({ slug: req.params.slugBook, chapters: chapterID[0], user_id: req.session.uuid }).then(
+		async function (book) {
+			if (book) {
+				await Chapter.findOne({ slug: req.params.slugChapter })
+					.then(async function (chapter) {
+						if (req.body.title) chapter.title = req.body.title;
+						if (req.body.text) chapter.text = req.body.text;
+						if (req.body.published) chapter.published = req.body.published;
+
+						try {
+							chap = await chapter.save();
+							res.redirect(`/book/${book.slug}/${chap.slug}`);
+						} catch (err) {
+							res.json({ message: err });
+						}
+					})
+					.catch((err) => {
+						res.json({ err });
+					});
+			} else {
+				res.json({ respone: 'User does not own book or chapter' });
+			}
+		}
+	);
+});
+
 router.put(
 	'/:slug',
 	loggedin(),
