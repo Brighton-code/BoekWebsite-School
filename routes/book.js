@@ -44,10 +44,14 @@ router.post('/:slug', loggedin(), async (req, res) => {
 });
 
 router.get('/:slugBook/:slugChapter', async (req, res) => {
-	await Chapter.findOne({ slug: req.params.slugChapter, published: true })
+	await Chapter.findOne({ slug: req.params.slugChapter })
 		.then((chapter) => {
-			if (chapter) res.json({ chapter });
-			else res.json({ error: 'no chapter found with slug' });
+			if (chapter.published) {
+				if (chapter) res.json({ chapter });
+				else res.json({ error: 'no chapter found with slug' });
+			} else {
+				res.json({ error: 'Chapter is not available' });
+			}
 		})
 		.catch((error) => {
 			res.json({ error });
