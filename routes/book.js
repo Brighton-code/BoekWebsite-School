@@ -90,6 +90,20 @@ router.put('/:slugBook/:slugChapter', loggedin(), async (req, res) => {
 	);
 });
 
+router.delete('/:slugBook/:slugChapter', loggedin(), async (req, res) => {
+	const chapterID = req.params.slugChapter.split('-', 1);
+	await Book.findOne({ slug: req.params.slugBook, chapters: chapterID[0], user_id: req.session.uuid }).then(
+		async function (book) {
+			if (book) {
+				await Chapter.deleteOne({ slug: req.params.slugChapter });
+				res.redirect('/').json({ respone: 'Delete book' });
+			} else {
+				res.json({ respone: 'User does not own book or chapter' });
+			}
+		}
+	);
+});
+
 router.put(
 	'/:slug',
 	loggedin(),
