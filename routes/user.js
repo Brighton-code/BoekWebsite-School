@@ -2,6 +2,7 @@ const express = require('express');
 const Book = require('./../models/book');
 const Chapter = require('./../models/chapter');
 const User = require('./../models/user');
+const bcrypt = require('bcryptjs');
 const router = express.Router();
 
 router.post('/login', async (req, res) => {
@@ -10,15 +11,23 @@ router.post('/login', async (req, res) => {
 		pass: req.body.password,
 	};
 	if (userData.name && userData.pass) {
-		await User.findOne({ nick_name: userData.name, password: userData.pass })
-			.then((u) => {
-				req.session.loggedin = true;
-				req.session.username = u.nick_name;
-				req.session.uuid = u._id;
-				res.json({ found: true, session: req.session });
+		await User.findOne({ nick_name: userData.name })
+			.then((user) => {
+				bcrypt.compare(userData.pass, user.password, function (error, isMatch) {
+					if (error) {
+						res.json({ error });
+					} else if (!isMatch) {
+						res.json({ respone: 'Password is incorrect' });
+					} else {
+						req.session.loggedin = true;
+						req.session.username = user.nick_name;
+						req.session.uuid = user._id;
+						res.json({ found: true, session: req.session });
+					}
+				});
 			})
 			.catch((error) => {
-				res.json({ error: error, respone: 'Could not find user with name or password' });
+				res.json({ error: error, respone: 'Could not find user with name' });
 			});
 	}
 });
