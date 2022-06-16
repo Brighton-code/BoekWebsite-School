@@ -95,8 +95,10 @@ router.delete('/:slugBook/:slugChapter', loggedin(), async (req, res) => {
 	await Book.findOne({ slug: req.params.slugBook, chapters: chapterID[0], user_id: req.session.uuid }).then(
 		async function (book) {
 			if (book) {
+				book.chapters.remove(chapterID);
 				await Chapter.deleteOne({ slug: req.params.slugChapter });
-				res.redirect('/').json({ respone: 'Delete book' });
+				await book.save();
+				res.json({ respone: `Deleted Chapter - ${req.params.slugChapter}` });
 			} else {
 				res.json({ respone: 'User does not own book or chapter' });
 			}
